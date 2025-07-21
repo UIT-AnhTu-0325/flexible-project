@@ -1,0 +1,23 @@
+# Ignore .NET build output
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.cache
+**/*.pdb
+**/*.mdb
+**/*.log
+**/TestResults/
+**/node_modules/
+**/.env
+**/.DS_Store
+**/dist/
+**/.vscode/
+# Ignore React build output
+react-app/build/
+react-app/node_modules/
+# Ignore environment files
+*.env
+# Ignore OS files
+Thumbs.db
+.DS_Store
