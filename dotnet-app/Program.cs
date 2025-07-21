@@ -21,7 +21,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 });
 
 // PostgreSQL connection string
-var connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=root";
+var connectionString = "";
 
 // Add DbContext for EF Core
 builder.Services.AddDbContext<BlogDbContext>(options =>

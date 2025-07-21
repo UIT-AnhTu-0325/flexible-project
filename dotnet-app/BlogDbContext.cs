@@ -31,12 +31,20 @@ namespace dotnet_app
 
                 entity.Property(e => e.Type).IsRequired();
 
-                // Configure the single, unified BlogData property to be stored in one JSON column.
-                // EF Core can now query into this JSON column.
-                entity.OwnsOne(b => b.BlogData, ownedBuilder =>
-                {
-                    ownedBuilder.ToJson("BlogData");
-                });
+            });
+
+            // For TPH, we configure the specific properties of derived types,
+            // but they all map to the same "Blog" table.
+            modelBuilder.Entity<BlogTravel>().OwnsOne(e => e.BlogData, ownedNavigationBuilder =>
+            {
+                // We must give the JSON column a unique name.
+                ownedNavigationBuilder.ToJson("TravelData");
+            });
+
+            modelBuilder.Entity<BlogOther>().OwnsOne(e => e.BlogData, ownedNavigationBuilder =>
+            {
+                // We must give this JSON column a unique name as well.
+                ownedNavigationBuilder.ToJson("OtherData");
             });
 
             modelBuilder.Entity<BlogFormConfig>(entity =>

@@ -10,6 +10,5 @@ namespace dotnet_app
         public string Status { get; set; } = "Draft";
         // This will be our "discriminator" column in the database.
         public string Type { get; protected set; }
-        public BlogData BlogData { get; set; } = new BlogData();
     }
 }
