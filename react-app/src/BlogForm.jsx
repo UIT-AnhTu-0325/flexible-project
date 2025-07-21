@@ -1,25 +1,44 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 function BlogForm({ formConfig, formData, submitting, onChange, onSubmit }) {
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const blogType = params.get('type') || '';
+    const filteredFields = formConfig.filter(field => field.blogType === blogType);
+
+    // Wrap onSubmit to inject type before submit and convert number fields
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const dataWithType = { ...formData, type: blogType };
+        // Convert number fields to numbers
+        filteredFields.forEach(field => {
+            if (field.fieldType === 'number' && dataWithType[field.fieldKey] !== undefined && dataWithType[field.fieldKey] !== '') {
+                dataWithType[field.fieldKey] = Number(dataWithType[field.fieldKey]);
+            }
+        });
+        onSubmit(dataWithType);
+    };
+
     return (
-        <form onSubmit={onSubmit}>
-            {formConfig.map(field => (
+        <form onSubmit={handleSubmit}>
+            {filteredFields.map(field => (
                 <div key={field.id} style={{ marginBottom: '1em' }}>
-                    <label htmlFor={field.fieldName}>{field.fieldName}</label><br />
+                    <label htmlFor={field.fieldKey}>{field.fieldName}</label><br />
                     {field.fieldType === 'textarea' ? (
                         <textarea
-                            name={field.fieldName}
-                            id={field.fieldName}
-                            value={formData[field.fieldName] || ''}
+                            name={field.fieldKey}
+                            id={field.fieldKey}
+                            value={formData[field.fieldKey] || ''}
                             onChange={onChange}
                             rows={4}
                             style={{ width: '100%' }}
                         />
                     ) : field.fieldName === 'Status' ? (
                         <select
-                            name={field.fieldName}
-                            id={field.fieldName}
-                            value={formData[field.fieldName] || 'Draft'}
+                            name={field.fieldKey}
+                            id={field.fieldKey}
+                            value={formData[field.fieldKey] || 'Draft'}
                             onChange={onChange}
                             style={{ width: '100%' }}
                         >
@@ -30,9 +49,9 @@ function BlogForm({ formConfig, formData, submitting, onChange, onSubmit }) {
                     ) : (
                         <input
                             type={field.fieldType}
-                            name={field.fieldName}
-                            id={field.fieldName}
-                            value={formData[field.fieldName] || ''}
+                            name={field.fieldKey}
+                            id={field.fieldKey}
+                            value={formData[field.fieldKey] || ''}
                             onChange={onChange}
                             style={{ width: '100%' }}
                         />

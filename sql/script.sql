@@ -55,3 +55,26 @@ UPDATE public."Blog" SET "Type" = 'Other' WHERE "Id" NOT IN (1, 2);
 
 -- Add Type field to BlogFormConfig for dynamic form (new statement)
 INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType") VALUES ('Type', 'text');
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "BlogType" VARCHAR(50) NOT NULL DEFAULT '';
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "FieldKey" VARCHAR(100) NOT NULL DEFAULT '';
+
+-- Example seed for Travel Blog
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Title', 'text', 'Travel', 'Title');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Content', 'textarea', 'Travel', 'Content');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Status', 'text', 'Travel', 'Status');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Type', 'text', 'Travel', 'Type');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('AirTicketFee', 'number', 'Travel', 'BlogData.AirTicketFee');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('HotelFee', 'number', 'Travel', 'BlogData.HotelFee');
+
+-- Example seed for Other Blog
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Title', 'text', 'Other', 'Title');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Content', 'textarea', 'Other', 'Content');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Status', 'text', 'Other', 'Status');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Type', 'text', 'Other', 'Type');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Quantity', 'number', 'Other', 'BlogData.Quantity');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Unit', 'text', 'Other', 'BlogData.Unit');
+INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('UnitPrice', 'number', 'Other', 'BlogData.UnitPrice');

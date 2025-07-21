@@ -1,58 +1,40 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_app
 {
-    public class BlogDbContext : DbContext
+    public class BlogDbContext(DbContextOptions<BlogDbContext> options) : DbContext(options)
     {
-        public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) { }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<BlogFormConfig> BlogFormConfigs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            // Configure common properties for the base Blog entity
             modelBuilder.Entity<Blog>(entity =>
             {
                 entity.ToTable("Blog", "public");
-
-                // Configure common properties. These will be applied to the columns
-                // in the single "Blog" table.
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Content).IsRequired();
-                entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
-
-                // Configure Table-Per-Hierarchy (TPH) inheritance.
-                // This uses a "discriminator" column to store the type of blog in each row.
-                // We'll use the existing "Type" property for this.
-                entity.HasDiscriminator(b => b.Type)
-                      .HasValue<BlogTravel>("Travel")
-                      .HasValue<BlogOther>("Other");
-
-                entity.Property(e => e.Type).IsRequired();
-
+                entity.Property(e => e.Type).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.BlogData)
+                    .HasColumnType("jsonb") // Assuming you want to store BlogData as JSON
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
+                        v => JsonSerializer.Deserialize<string>(v, JsonSerializerOptions.Default));
             });
 
-            // For TPH, we configure the specific properties of derived types,
-            // but they all map to the same "Blog" table.
-            modelBuilder.Entity<BlogTravel>().OwnsOne(e => e.BlogData, ownedNavigationBuilder =>
-            {
-                // We must give the JSON column a unique name.
-                ownedNavigationBuilder.ToJson("TravelData");
-            });
-
-            modelBuilder.Entity<BlogOther>().OwnsOne(e => e.BlogData, ownedNavigationBuilder =>
-            {
-                // We must give this JSON column a unique name as well.
-                ownedNavigationBuilder.ToJson("OtherData");
-            });
-
+            // Configure BlogFormConfig
             modelBuilder.Entity<BlogFormConfig>(entity =>
             {
                 entity.ToTable("BlogFormConfig", "public");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.FieldName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.FieldType).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.BlogType).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.FieldKey).IsRequired().HasMaxLength(100);
             });
         }
     }

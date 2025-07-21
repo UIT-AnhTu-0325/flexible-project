@@ -1,32 +1,32 @@
 namespace dotnet_app
 {
-    public class BlogTravel : Blog
+    public class TravelBlog : BaseBlog
     {
-        public BlogTravel()
+        public TravelBlog()
         {
             // Set the discriminator value for this type.
             Type = "Travel";
         }
-        public BlogTravelData BlogData { get; set; } = new BlogTravelData();
+        public TravelBlogData BlogData { get; set; } = new TravelBlogData();
     }
 
-    public class BlogOther : Blog
+    public class OtherBlog : BaseBlog
     {
-        public BlogOther()
+        public OtherBlog()
         {
             // Set the discriminator value for this type.
             Type = "Other";
         }
-        public BlogOtherData BlogData { get; set; } = new BlogOtherData();
+        public OtherBlogData BlogData { get; set; } = new OtherBlogData();
     }
 
-    public class BlogTravelData
+    public class TravelBlogData
     {
         public decimal AirTicketFee { get; set; }
         public decimal HotelFee { get; set; }
     }
 
-    public class BlogOtherData
+    public class OtherBlogData
     {
         public int Quantity { get; set; }
         public string Unit { get; set; } = string.Empty;

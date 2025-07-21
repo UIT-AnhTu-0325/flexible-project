@@ -1,8 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-function BlogTable({ blogs, loading }) {
-    const navigate = useNavigate();
+function BlogTable({ blogs, loading, onView }) {
     return (
         <div className="blog-table">
             <h1>Blog List</h1>
@@ -31,7 +29,7 @@ function BlogTable({ blogs, loading }) {
                                         }}>{blog.status}</span>
                                     </td>
                                     <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                                        <button onClick={() => navigate(`/view/${blog.id}`)}>View</button>
+                                        <button onClick={() => onView(blog.id)}>View</button>
                                     </td>
                                 </tr>
                             ))}

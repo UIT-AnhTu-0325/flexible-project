@@ -46,13 +46,23 @@ function App() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (data) => {
+    // Transform flat data to nested object
+    const nestedData = {};
+    Object.entries(data).forEach(([key, value]) => {
+      if (key.includes('.')) {
+        const [parent, child] = key.split('.');
+        if (!nestedData[parent]) nestedData[parent] = {};
+        nestedData[parent][child] = value;
+      } else {
+        nestedData[key] = value;
+      }
+    });
     setSubmitting(true);
     fetch('http://localhost:5258/blogs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(nestedData)
     })
       .then(res => res.ok ? res.json() : null)
       .then(newBlog => {
@@ -82,8 +92,8 @@ function App() {
                 <option value="Other">Other</option>
               </select>
             </div>
-            <BlogTable blogs={blogs} loading={loading} />
-            <button style={{ marginTop: '2em' }} onClick={() => navigate('/create')}>Create Blog</button>
+            <BlogTable blogs={blogs} loading={loading} onView={id => navigate(`/view/${id}?type=${blogType}`)} />
+            <button style={{ marginTop: '2em' }} onClick={() => navigate(`/create?type=${blogType}`)}>Create Blog</button>
           </div>
         }
       />
@@ -102,6 +112,7 @@ function App() {
               submitting={submitting}
               onChange={handleChange}
               onSubmit={handleSubmit}
+              blogType={blogType}
             />
             <button style={{ marginTop: '2em' }} onClick={() => navigate('/')}>Back to List</button>
           </div>
