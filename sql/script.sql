@@ -78,3 +78,15 @@ INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "Fiel
 INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Quantity', 'number', 'Other', 'BlogData.Quantity');
 INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('Unit', 'text', 'Other', 'BlogData.Unit');
 INSERT INTO public."BlogFormConfig" ("FieldName", "FieldType", "BlogType", "FieldKey") VALUES ('UnitPrice', 'number', 'Other', 'BlogData.UnitPrice');
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "VisibleWhenStatus" VARCHAR(100);
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "RequiredWhenStatus" VARCHAR(100);
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "EditWhenStatus" VARCHAR(100);
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "Order" INT NOT NULL DEFAULT 0;

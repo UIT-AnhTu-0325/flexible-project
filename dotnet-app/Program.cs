@@ -98,7 +98,6 @@ app.MapGet("/blogs/{id}", async ([FromRoute] int id, [FromQuery] string type, Bl
 .WithName("GetBlogDetail")
 .WithOpenApi();
 
-
 app.MapPost("/blogs", async ([FromBody] Blog blog, BlogDbContext db) =>
 {
     db.Blogs.Add(blog);
@@ -106,6 +105,21 @@ app.MapPost("/blogs", async ([FromBody] Blog blog, BlogDbContext db) =>
     return Results.Created($"/blogs/{blog.Id}", blog);
 })
 .WithName("CreateBlog")
+.WithOpenApi();
+
+app.MapPut("/blogs/{id}", async ([FromRoute] int id, [FromBody] Blog updatedBlog, BlogDbContext db) =>
+{
+    var blog = await db.Blogs.FindAsync(id);
+    if (blog == null) return Results.NotFound();
+    // Only update allowed properties
+    blog.Title = updatedBlog.Title;
+    blog.Content = updatedBlog.Content;
+    blog.Status = updatedBlog.Status;
+    blog.BlogData = updatedBlog.BlogData;
+    await db.SaveChangesAsync();
+    return Results.Ok(blog);
+})
+.WithName("UpdateBlog")
 .WithOpenApi();
 
 app.Run();

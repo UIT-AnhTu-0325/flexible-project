@@ -38,8 +38,16 @@ function BlogView() {
     if (loading) return <p>Loading...</p>;
     if (!blog) return <p>Blog not found.</p>;
 
-    // Filter fields by blogType
-    const filteredFields = formConfig.filter(field => field.blogType === blogType);
+    // Filter fields by blogType, visibleWhenStatus, and order
+    const status = blog?.status ?? blog?.Status ?? '';
+    const filteredFields = formConfig
+        .filter(field => {
+            if (field.blogType !== blogType) return false;
+            const visibleStatuses = typeof field.visibleWhenStatus === 'string' ? field.visibleWhenStatus.split(',').map(s => s.trim()).filter(Boolean) : Array.isArray(field.visibleWhenStatus) ? field.visibleWhenStatus.filter(Boolean) : null;
+            // Only show field if visibleStatuses exists, has length > 0, and includes current status
+            return visibleStatuses && visibleStatuses.length > 0 && visibleStatuses.includes(status);
+        })
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
     // Helper to get value from blog object, supporting nested keys
     const getValue = (fieldKey) => {

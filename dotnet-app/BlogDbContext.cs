@@ -23,7 +23,7 @@ namespace dotnet_app
                     .HasColumnType("jsonb") // Assuming you want to store BlogData as JSON
                     .HasConversion(
                         v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
-                        v => JsonSerializer.Deserialize<string>(v, JsonSerializerOptions.Default));
+                        v => JsonSerializer.Deserialize<object>(v, JsonSerializerOptions.Default));
             });
 
             // Configure BlogFormConfig
@@ -35,6 +35,10 @@ namespace dotnet_app
                 entity.Property(e => e.FieldType).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.BlogType).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.FieldKey).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.VisibleWhenStatus).HasMaxLength(100);
+                entity.Property(e => e.RequiredWhenStatus).HasMaxLength(100);
+                entity.Property(e => e.EditWhenStatus).HasMaxLength(100);
+                entity.Property(e => e.Order);
             });
         }
     }

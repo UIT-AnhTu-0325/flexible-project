@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import BlogTable from './BlogTable';
 import BlogView from './BlogView';
 import BlogForm from './BlogForm';
+import EditBlogForm from './EditBlogForm';
 import './App.css';
 
 
@@ -92,7 +93,12 @@ function App() {
                 <option value="Other">Other</option>
               </select>
             </div>
-            <BlogTable blogs={blogs} loading={loading} onView={id => navigate(`/view/${id}?type=${blogType}`)} />
+            <BlogTable
+              blogs={blogs}
+              loading={loading}
+              onView={id => navigate(`/view/${id}?type=${blogType}`)}
+              onEdit={id => navigate(`/edit/${id}?type=${blogType}`)}
+            />
             <button style={{ marginTop: '2em' }} onClick={() => navigate(`/create?type=${blogType}`)}>Create Blog</button>
           </div>
         }
@@ -116,6 +122,17 @@ function App() {
             />
             <button style={{ marginTop: '2em' }} onClick={() => navigate('/')}>Back to List</button>
           </div>
+        }
+      />
+      <Route
+        path="/edit/:id"
+        element={
+          <EditBlogForm
+            formConfig={formConfig}
+            blogs={blogs}
+            setBlogs={setBlogs}
+            blogType={blogType}
+          />
         }
       />
     </Routes>
