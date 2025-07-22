@@ -24,6 +24,9 @@ namespace dotnet_app
     {
         public decimal AirTicketFee { get; set; }
         public decimal HotelFee { get; set; }
+        public decimal Blog { get; set; }
+
+        public decimal ReplaceBlog { get; set; }
     }
 
     public class OtherBlogData
