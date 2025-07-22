@@ -15,7 +15,7 @@ function EditBlogForm({ formConfig, setBlogs, blogType }) {
     const [status, setStatus] = useState('');
     const [filteredFields, setFilteredFields] = useState([]);
     useEffect(() => {
-        setStatus(formData.status ?? formData.Status ?? '');
+        setStatus(formData.status ?? '');
     }, [formData]);
 
     useEffect(() => {
@@ -40,12 +40,9 @@ function EditBlogForm({ formConfig, setBlogs, blogType }) {
                     formConfig.forEach(field => {
                         if (field.fieldKey.includes('.')) {
                             const [parent, child] = field.fieldKey.split('.');
-                            // Try lowerCamelCase and fallback to original
-                            const parentKey = parent.charAt(0).toLowerCase() + parent.slice(1);
-                            const childKey = child.charAt(0).toLowerCase() + child.slice(1);
-                            flatData[field.fieldKey] = (data[parent]?.[child]) ?? (data[parentKey]?.[child]) ?? (data[parent]?.[childKey]) ?? (data[parentKey]?.[childKey]) ?? '';
+                            flatData[field.fieldKey] = data[parent]?.[child] ?? '';
                         } else {
-                            flatData[field.fieldKey] = data[field.fieldKey] ?? data[field.fieldKey.charAt(0).toLowerCase() + field.fieldKey.slice(1)] ?? '';
+                            flatData[field.fieldKey] = data[field.fieldKey] ?? '';
                         }
                     });
                     setFormData(flatData);

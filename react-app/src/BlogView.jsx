@@ -39,7 +39,7 @@ function BlogView() {
     if (!blog) return <p>Blog not found.</p>;
 
     // Filter fields by blogType, visibleWhenStatus, and order
-    const status = blog?.status ?? blog?.Status ?? '';
+    const status = blog?.status ?? '';
     const filteredFields = formConfig
         .filter(field => {
             if (field.blogType !== blogType) return false;
@@ -53,14 +53,9 @@ function BlogView() {
     const getValue = (fieldKey) => {
         if (fieldKey.includes('.')) {
             const [parent, child] = fieldKey.split('.');
-            // Try lowerCamelCase and fallback to original
-            const parentKey = parent.charAt(0).toLowerCase() + parent.slice(1);
-            const childKey = child.charAt(0).toLowerCase() + child.slice(1);
-            return blog[parentKey]?.[childKey] ?? blog[parent]?.[child] ?? '';
+            return blog[parent]?.[child] ?? '';
         }
-        // Try lowerCamelCase and fallback to original
-        const key = fieldKey.charAt(0).toLowerCase() + fieldKey.slice(1);
-        return blog[key] ?? blog[fieldKey] ?? '';
+        return blog[fieldKey] ?? '';
     };
 
     return (
