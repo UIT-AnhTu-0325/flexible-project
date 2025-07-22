@@ -17,5 +17,7 @@ namespace dotnet_app
         public string? EditWhenStatus { get; set; }
         // Order for UI rendering
         public int Order { get; set; } = 0;
+        public int ColSpan { get; set; } = 0; // For responsive design, e.g. 1-12 for Bootstrap grid
+        public string? CustomComponent { get; set; } // e.g. "CustomDatePicker"
     }
 }

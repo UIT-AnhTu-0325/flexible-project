@@ -90,3 +90,9 @@ ADD COLUMN "EditWhenStatus" VARCHAR(100);
 
 ALTER TABLE "BlogFormConfig"
 ADD COLUMN "Order" INT NOT NULL DEFAULT 0;
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "ColSpan" INT NOT NULL DEFAULT 0;
+
+ALTER TABLE "BlogFormConfig"
+ADD COLUMN "CustomComponent" VARCHAR(100);

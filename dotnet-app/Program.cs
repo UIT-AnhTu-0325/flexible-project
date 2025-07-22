@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 // PostgreSQL connection string
 var connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=root;";
 
+// var connectionString = "Host=localhost;Port=5433;Database=customer_management;Username=postgres;Password=postgres;";
 // Add DbContext for EF Core
 builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseNpgsql(connectionString));
