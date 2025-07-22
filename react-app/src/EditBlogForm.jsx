@@ -3,10 +3,12 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import BlogSelect from './BlogSelect'
 import BlogTableSelect from './BlogTableSelect'
+import SubBlogList from './SubBlogList'
 
 const customComponents = {
   BlogSelect,
-  BlogTableSelect
+  BlogTableSelect,
+  SubBlogList
 }
 
 function EditBlogForm({ formConfig, setBlogs, blogType }) {
@@ -89,45 +91,46 @@ function EditBlogForm({ formConfig, setBlogs, blogType }) {
         nestedData[key] = value
       }
     })
+    console.log(formData)
     // Convert number fields to numbers
-    filteredFields.forEach((field) => {
-      if (field.fieldType === 'number') {
-        if (field.fieldKey.includes('.')) {
-          const [parent, child] = field.fieldKey.split('.')
-          if (
-            nestedData[parent] &&
-            nestedData[parent][child] !== undefined &&
-            nestedData[parent][child] !== ''
-          ) {
-            nestedData[parent][child] = Number(nestedData[parent][child])
-          }
-        } else {
-          if (
-            nestedData[field.fieldKey] !== undefined &&
-            nestedData[field.fieldKey] !== ''
-          ) {
-            nestedData[field.fieldKey] = Number(nestedData[field.fieldKey])
-          }
-        }
-      }
-    })
-    setSubmitting(true)
-    fetch(`http://localhost:5258/blogs/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(nestedData)
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((updatedBlog) => {
-        if (updatedBlog) {
-          setBlogs((prev) =>
-            prev.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
-          )
-          navigate(`/view/${id}?type=${type}`)
-        }
-        setSubmitting(false)
-      })
-      .catch(() => setSubmitting(false))
+    // filteredFields.forEach((field) => {
+    //   if (field.fieldType === 'number') {
+    //     if (field.fieldKey.includes('.')) {
+    //       const [parent, child] = field.fieldKey.split('.')
+    //       if (
+    //         nestedData[parent] &&
+    //         nestedData[parent][child] !== undefined &&
+    //         nestedData[parent][child] !== ''
+    //       ) {
+    //         nestedData[parent][child] = Number(nestedData[parent][child])
+    //       }
+    //     } else {
+    //       if (
+    //         nestedData[field.fieldKey] !== undefined &&
+    //         nestedData[field.fieldKey] !== ''
+    //       ) {
+    //         nestedData[field.fieldKey] = Number(nestedData[field.fieldKey])
+    //       }
+    //     }
+    //   }
+    // })
+    // setSubmitting(true)
+    // fetch(`http://localhost:5258/blogs/${id}`, {
+    //   method: 'PUT',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(nestedData)
+    // })
+    //   .then((res) => (res.ok ? res.json() : null))
+    //   .then((updatedBlog) => {
+    //     if (updatedBlog) {
+    //       setBlogs((prev) =>
+    //         prev.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
+    //       )
+    //       navigate(`/view/${id}?type=${type}`)
+    //     }
+    //     setSubmitting(false)
+    //   })
+    //   .catch(() => setSubmitting(false))
   }
 
   if (loading) return <p>Loading...</p>
@@ -187,6 +190,7 @@ function EditBlogForm({ formConfig, setBlogs, blogType }) {
                       onChange={handleChange}
                       disabled={!canEdit}
                       required={isRequired}
+                      formConfig={formConfig}
                     />
                   ) : field.fieldType === 'textarea' ? (
                     <Form.Control
