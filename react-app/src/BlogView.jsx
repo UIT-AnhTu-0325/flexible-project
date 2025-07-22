@@ -11,8 +11,6 @@ function BlogView() {
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
-  console.log(blog)
-
   useEffect(() => {
     fetch(`http://localhost:5258/blogs/${id}?type=${blogType}`)
       .then((res) => (res.ok ? res.json() : null))
