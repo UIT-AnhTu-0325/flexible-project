@@ -39,6 +39,8 @@ namespace dotnet_app
                 entity.Property(e => e.RequiredWhenStatus).HasMaxLength(100);
                 entity.Property(e => e.EditWhenStatus).HasMaxLength(100);
                 entity.Property(e => e.Order);
+                entity.Property(e => e.ColSpan);
+                entity.Property(e => e.CustomComponent).HasMaxLength(100);
             });
         }
     }
